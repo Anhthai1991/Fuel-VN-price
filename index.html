@@ -1,24 +1,11 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VN Gasoline Price Tracker 🛢️</title>
+    <title>PVOIL Oil Price Tracker 🛢️</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-    <main class="main-content">
-  <!-- THÊM dropdown tại đây -->
-  <div style="margin:16px 0">
-    <label for="productSelect">Chọn loại xăng dầu:</label>
-    <select id="productSelect">
-      <option value="ALL">ALL</option>
-      <option value="Xăng RON 95-III">Xăng RON 95-III</option>
-      <option value="Xăng E5 RON 92-II">Xăng E5 RON 92-II</option>
-      <option value="Dầu DO 0,05S-II">Dầu DO 0,05S-II</option>
-      <option value="Dầu KO">Dầu KO</option>
-    </select>
-  </div>
     <style>
         :root {
   /* Primitive Color Tokens */
@@ -633,7 +620,7 @@ tbody tr:hover {
     <div class="dashboard-container">
         <header class="header">
             <div class="header-content">
-                <h1>🛢️ VN Gasoline Oil Price Tracker</h1>
+                <h1>🛢️ PVOIL Oil Price Tracker</h1>
                 <div class="header-subtitle">Real-time prices and historical trends (2019-2025)</div>
                 <div class="header-info">
                     <div>📅 <strong>Last Update:</strong> <span id="lastUpdate">03/11/2025 15:00</span></div>
@@ -729,7 +716,7 @@ tbody tr:hover {
         </main>
 
         <footer class="footer">
-            <div>© 2025 VN Gasoline Oil Price Tracker | Data updated every 7 days at 15:00 | Historical data from 2019-2025</div>
+            <div>© 2025 PVOIL Oil Price Tracker | Data updated every 7 days at 15:00 | Historical data from 2019-2025</div>
         </footer>
     </div>
 
@@ -959,66 +946,33 @@ tbody tr:hover {
 
         // Update chart
         function updateChart() {
-  const ctx = document.getElementById('priceChart').getContext('2d');
-  if (priceChart) priceChart.destroy();
+            const ctx = document.getElementById('priceChart').getContext('2d');
+            if (priceChart) priceChart.destroy();
 
-  // Lấy loại sản phẩm đang chọn
-  const selectedProduct = document.getElementById('productSelect').value;
+            const groupedData = {};
+            filteredData.forEach(d => {
+                if (!groupedData[d.date]) groupedData[d.date] = {};
+                groupedData[d.date][d.product] = d.price;
+            });
 
-  const groupedData = {};
-  filteredData.forEach(d => {
-    if (!groupedData[d.date]) groupedData[d.date] = {};
-    groupedData[d.date][d.product] = d.price;
-  });
-  const sortedDates = Object.keys(groupedData).sort((a, b) => parseDate(a) - parseDate(b));
-  const labels = sortedDates.map(d => formatDate(d));
+            const sortedDates = Object.keys(groupedData).sort((a, b) => parseDate(a) - parseDate(b));
+            const labels = sortedDates.map(d => formatDate(d));
 
-  // Chuẩn bị datasets cho chart
-  let datasets;
-  if (selectedProduct === 'ALL') {
-    datasets = Object.keys(productMap).map(productName => {
-      const productInfo = productMap[productName];
-      const data = sortedDates.map(date => groupedData[date][productName] || null);
-      return {
-        label: productName,
-        data: data,
-        borderColor: productInfo.color,
-        backgroundColor: productInfo.color + '20',
-        tension: 0.4,
-        fill: false,
-        pointRadius: 3,
-        pointHoverRadius: 5
-      };
-    });
-  } else {
-    const productInfo = productMap[selectedProduct];
-    const data = sortedDates.map(date => groupedData[date][selectedProduct] || null);
-    datasets = [{
-      label: selectedProduct,
-      data: data,
-      borderColor: productInfo.color,
-      backgroundColor: productInfo.color + '20',
-      tension: 0.4,
-      fill: false,
-      pointRadius: 3,
-      pointHoverRadius: 5
-    }];
-  }
-
-  priceChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: labels,
-      datasets: datasets
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      // ...other chart options...
-    }
-  });
-}
-
+            const datasets = Object.keys(productMap).map(productName => {
+                const productInfo = productMap[productName];
+                const data = sortedDates.map(date => groupedData[date][productName] || null);
+                
+                return {
+                    label: productName,
+                    data: data,
+                    borderColor: productInfo.color,
+                    backgroundColor: productInfo.color + '20',
+                    tension: 0.4,
+                    fill: false,
+                    pointRadius: 3,
+                    pointHoverRadius: 5
+                };
+            });
 
             priceChart = new Chart(ctx, {
                 type: 'line',
@@ -1068,18 +1022,6 @@ tbody tr:hover {
                 }
             });
         }
-function filterDataByProduct(product) {
-  if (product === 'ALL') {
-    return rawData.filter(d => d.date >= currentRange.start && d.date <= currentRange.end);
-  }
-  return rawData.filter(d => d.product === product && d.date >= currentRange.start && d.date <= currentRange.end);
-}
-// Event: Chọn loại xăng dầu
-document.getElementById('productSelect').addEventListener('change', function() {
-  const selectedProduct = this.value;
-  filteredData = filterDataByProduct(selectedProduct);
-  updateChart(filteredData);
-});
 
         // Update table
         function updateTable() {
