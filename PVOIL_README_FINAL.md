@@ -96,7 +96,7 @@ git push origin main
 
 **Then enable GitHub Pages:**
 - Settings → Pages → Deploy from main branch
-- Your dashboard: `https://username.github.io/pvoil-price-tracker`
+- Your dashboard: `https://Anhthai1991.github.io/Fuel-VN-price`
 
 ## 📊 Dashboard Features
 
