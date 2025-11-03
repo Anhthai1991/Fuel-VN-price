@@ -1,11 +1,24 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VN Gasoline Price Tracker 🛢️</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
+    <main class="main-content">
+  <!-- THÊM dropdown tại đây -->
+  <div style="margin:16px 0">
+    <label for="productSelect">Chọn loại xăng dầu:</label>
+    <select id="productSelect">
+      <option value="ALL">Tất cả</option>
+      <option value="Xăng RON 95-III">Xăng RON 95-III</option>
+      <option value="Xăng E5 RON 92-II">Xăng E5 RON 92-II</option>
+      <option value="Dầu DO 0,05S-II">Dầu DO 0,05S-II</option>
+      <option value="Dầu KO">Dầu KO</option>
+    </select>
+  </div>
     <style>
         :root {
   /* Primitive Color Tokens */
