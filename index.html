@@ -1035,6 +1035,31 @@ tbody tr:hover {
                 }
             });
         }
+// Giả sử dataset (CSV) đã được load thành danh sách object 'rawData'
+let currentRange = {start: '2018-01-01', end: '2025-12-31'};
+let filteredData = rawData;
+
+function filterDataByProduct(product) {
+  if (product === 'ALL') {
+    return rawData.filter(d => d.date >= currentRange.start && d.date <= currentRange.end);
+  }
+  return rawData.filter(d => d.product === product && d.date >= currentRange.start && d.date <= currentRange.end);
+}
+
+function updateChart(data) {
+  // Hàm vẽ lại chart dùng dữ liệu mới (code chart có sẵn trong dashboard)
+  // Ví dụ với Chart.js:
+  // chartInstance.data.labels = data.map(d => d.date);
+  // chartInstance.data.datasets[0].data = data.map(d => d.price);
+  // chartInstance.update();
+}
+
+// Event: Chọn loại xăng dầu
+document.getElementById('productSelect').addEventListener('change', function() {
+  const selectedProduct = this.value;
+  filteredData = filterDataByProduct(selectedProduct);
+  updateChart(filteredData);
+});
 
         // Update table
         function updateTable() {
