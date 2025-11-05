@@ -13,7 +13,7 @@ import subprocess
 import sys
 
 # Configuration
-PVOIL_URL = "https://www.pvoil.com.vn/thuong-mai/gia-ban-le"
+PVOIL_URL = "https://www.pvoil.com.vn/tin-gia-xang-dau"
 CSV_FILE = "pvoil_gasoline_prices_full.csv"
 GIT_COMMIT_MESSAGE = "Auto-update PVOIL fuel prices - {date}"
 
