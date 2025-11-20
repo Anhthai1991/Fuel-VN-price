@@ -98,8 +98,7 @@ def crawl_pvoil_prices_by_date(date_str):
             if len(cells) >= 4:
                 try:
                     fuel_type = cells[1].get_text(strip=True)
-                    price_str = cells[3].get_text(strip=True)  # FIXED: Changed from cells[2] to cells[3]
-                    
+price_str = cells[2].get_text(strip=True)  # FIXED: Changed from cells[3] to cells[2]                    
                     # Clean price: remove VND symbol, dots, commas
                     price_clean = price_str.replace('đ', '').replace('.', '').replace(',', '').strip()
                     
