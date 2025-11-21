@@ -2,7 +2,7 @@ name: Auto Update Fuel Prices
 
 on:
   schedule:
-    - cron: '0 1 * * *'  # Chạy hàng ngày lúc 1:00 AM UTC (8:00 AM VN)
+    - cron: '0 10 * * 5'  # Chạy hàng ngày lúc 10:00 AM UTC (5:00 PM VN)
   workflow_dispatch:  # Cho phép chạy thủ công
 
 permissions:
