@@ -76,3 +76,5 @@ function selectRange(range) {
 
 
 export default { loadData };
+
+export { loadData };
