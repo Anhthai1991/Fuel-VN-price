@@ -89,3 +89,7 @@ export default {
   selectRange,
   updateDashboard
 };
+
+
+// Initialize the app on page load
+initApp();
