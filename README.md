@@ -26,7 +26,7 @@ pvoil-price-tracker/
 ├── styles.css                          # Professional styling
 ├── script.js                           # Interactive features
 ├── pvoil_gasoline_prices_full.csv      # Your data (auto-updated)
-├── pvoil_updater.py                    # Update script
+├── update_pvoil_prices.py              # Update script
 ├── requirements.txt                    # Python dependencies
 ├── README.md                           # This file
 │
@@ -251,7 +251,7 @@ ls -la pvoil_gasoline_prices_full.csv
 3. Check Actions tab for logs
 
 ### Q: PVOIL website changed
-**A:** Update selectors in `pvoil_updater.py`:
+**A:** Update selectors in `update_pvoil_prices.py`:
 ```python
 # Find new table selector
 table = soup.find('table', {'class': 'new-class'})
@@ -283,7 +283,7 @@ git log -1 --format=%ai -- pvoil_gasoline_prices_full.csv
 
 ### Manual update
 ```bash
-python pvoil_updater.py && git add . && git commit -m "Manual update" && git push
+python update_pvoil_prices.py && git add . && git commit -m "Manual update" && git push
 ```
 
 ## 🎨 Customization
@@ -306,7 +306,7 @@ Edit workflow cron:
 ```
 
 ### Add new products
-Edit `pvoil_updater.py`:
+Edit `update_pvoil_prices.py`:
 ```python
 PRODUCTS = {
     'New Product': 'new_product_code',
