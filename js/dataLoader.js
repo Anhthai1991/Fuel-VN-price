@@ -1,4 +1,6 @@
 /** CSV Data Loading & Processing Module */
+import { CSV_FILE } from './config.js';
+
 
 let allData = [];
 let filteredData = [];
