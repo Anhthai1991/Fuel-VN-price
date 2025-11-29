@@ -8,33 +8,43 @@ let filteredData = [];
 let currentRange = 'ALL';
 
 // Load CSV using Papa Parse
+// Load CSV using Papa Parse
 function loadData() {
-  Papa.parse(CSV_FILE, {
-    download: true,
-    header: true,
-    skipEmptyLines: true,
-    complete: function(results) {
-      if (results.data && results.data.length > 0) {
-        allData = results.data.map(row => ({
-          date: row['Ngày'] || row['Date'],
-          product: row['Mặt hàng'] || row['Product'],
-          price: parseFloat(row['Giá (VND)'] || row['Price'])
-        })).filter(d => d.date && d.product && !isNaN(d.price));
-        
-        if (allData.length > 0) {
-          document.getElementById('totalRecords').textContent = `${allData.length} entries`;
-          document.getElementById('loadingMessage').style.display = 'none';
-          document.getElementById('dashboardContent').style.display = 'block';
-          getLastDate();
-          selectRange('ALL');
+  return new Promise((resolve, reject) => {
+    Papa.parse(CSV_FILE, {
+      download: true,
+      header: true,
+      skipEmptyLines: true,
+      complete: function(results) {
+        if (results.data && results.data.length > 0) {
+          allData = results.data.map(row => ({
+            date: row['Ngày'] || row['Date'],
+            product: row['Mặt hàng'] || row['Product'],
+            price: parseFloat(row['Giá (VND)'] || row['Price'])
+          })).filter(d => d.date && d.product && !isNaN(d.price));
+          
+          if (allData.length > 0) {
+            document.getElementById('totalRecords').textContent = `${allData.length} entries`;
+            document.getElementById('loadingMessage').style.display = 'none';
+            document.getElementById('dashboardContent').style.display = 'block';
+            getLastDate();
+            selectRange('ALL');
+            resolve(allData);
+          } else {
+            showError('No valid data found');
+            reject('No valid data found');
+          }
         } else {
-          showError('No valid data found');
+          showError('Failed to parse CSV');
+          reject('Failed to parse CSV');
         }
-      } else {
-        showError('Failed to parse CSV');
+      },
+      error: function(error) {
+        showError('Error loading CSV: ' + error.message);
+        reject(error);
       }
-    },
-    error: function(error) {
+    });
+  });
       showError('Error loading CSV: ' + error.message);
     }
   });
