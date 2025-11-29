@@ -175,3 +175,16 @@ export default {
   hideError,
   updateRangeButtons
 };
+// in ui.js (add above exports)
+export function ensureProductContainers() {
+  const wrap = document.getElementById('price-cards');
+  if (!wrap) return;
+  // clear once and re-create
+  wrap.innerHTML = '';
+  (Array.isArray(config.PRODUCTS) ? config.PRODUCTS : []).forEach(p => {
+    const div = document.createElement('div');
+    div.id = `price-${p.code}`;
+    div.className = 'price-card-wrapper';
+    wrap.appendChild(div);
+  });
+}
