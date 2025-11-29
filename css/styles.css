@@ -103,7 +103,7 @@ body {
 }
 
 /* Last updated timestamp */
-#lastUpdate {
+#last-update {
   font-size: var(--font-size-sm, 0.875rem);
   color: var(--warning-color, #666);
   text-align: right;
