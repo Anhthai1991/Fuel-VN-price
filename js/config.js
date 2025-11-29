@@ -12,3 +12,5 @@ const PRODUCTS = {
 const CSV_FILE = 'pvoil_gasoline_prices_full.csv';
 const DATE_RANGES = { '1M': 1, '3M': 3, '6M': 6, '1Y': 12, '3Y': 36, 'ALL': null };
 const UI = { CHART_HEIGHT: 400, TABLE_HEIGHT: 600 };
+
+export default { PRODUCTS, CSV_FILE, DATE_RANGES, UI };
