@@ -40,6 +40,25 @@ function loadData() {
   });
 }
 
+// Helper functions for date parsing and formatting
+function parseDate(dateStr) {
+  if (!dateStr) return new Date(0);
+  // Assuming format: "Ngày/Tháng/Năm" or "DD/MM/YYYY"
+  const parts = dateStr.trim().split('/');
+  if (parts.length === 3) {
+    return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+  }
+  return new Date(dateStr);
+}
+
+function formatDate(dateStr) {
+  const date = parseDate(dateStr);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+}
+
 // Get last update date
 function getLastDate() {
   const sorted = [...allData].sort((a, b) => parseDate(b.date) - parseDate(a.date));
