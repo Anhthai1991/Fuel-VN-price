@@ -904,12 +904,9 @@ const relativeChange = calcRelativeChange(latestPrice, change);
      <span class="quick-stat-change ${changeClass}">${relativeText}</span>
      </div>
      </div>
-     </div>
-     `
-                `;
-
-                const productInfo = productMap[productName];
-                
+     </div>`}).join('');
+   }
+   }
                 return `
                     <div class="quick-stat-card animate-in">
                         <div class="quick-stat-header">
