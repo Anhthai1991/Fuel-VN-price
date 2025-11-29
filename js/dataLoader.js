@@ -45,9 +45,6 @@ function loadData() {
       }
     });
   });
-      showError('Error loading CSV: ' + error.message);
-    }
-  });
 }
 
 // Helper functions for date parsing and formatting
