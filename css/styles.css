@@ -67,7 +67,41 @@ body {
   padding: var(--spacing-lg);
   box-shadow: var(--shadow-md);
   margin-bottom: var(--spacing-lg);
+
+  /* chart sizing */
+  height: 420px;
+  display: flex;
+  align-items: stretch;
 }
+
+.chart-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.price-card-wrapper {
+  min-height: 120px;
+  display: flex;
+  align-items: stretch;
+}
+.price-card-wrapper .price-card {
+  width: 100%;
+}
+
+#statistics {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.stat-item { flex: 1 1 30%; margin-bottom: var(--spacing-sm); }
+.stat-item span { display: block; color: #666; font-size: var(--font-size-sm); }
+.stat-item strong { display: block; font-size: var(--font-size-lg); margin-top: 6px; }
 
 .range-buttons {
   display: flex;
@@ -100,6 +134,7 @@ body {
   .container { padding: var(--spacing-md); }
   .dashboard { grid-template-columns: 1fr; }
   .range-buttons { flex-wrap: wrap; }
+  .chart-container { height: 320px; }
 }
 
 /* Last updated timestamp */
