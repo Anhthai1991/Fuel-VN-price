@@ -8,8 +8,7 @@ let filteredData = [];
 let currentRange = 'ALL';
 
 // Load CSV using Papa Parse
-// Load CSV using Papa Parse
-function loadData() {
+  function loadData() {
   return new Promise((resolve, reject) => {
     Papa.parse(CSV_FILE, {
       download: true,
