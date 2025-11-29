@@ -101,3 +101,12 @@ body {
   .dashboard { grid-template-columns: 1fr; }
   .range-buttons { flex-wrap: wrap; }
 }
+
+/* Last updated timestamp */
+#lastUpdate {
+  font-size: var(--font-size-sm, 0.875rem);
+  color: var(--warning-color, #666);
+  text-align: right;
+  padding: var(--spacing-sm, 0.5rem) var(--spacing-md, 1rem);
+  font-style: italic;
+}
