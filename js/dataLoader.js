@@ -63,7 +63,7 @@ function formatDate(dateStr) {
 function getLastDate() {
   const sorted = [...allData].sort((a, b) => parseDate(b.date) - parseDate(a.date));
   if (sorted.length > 0) {
-    document.getElementById('lastUpdate').textContent = formatDate(sorted[0].date);
+    document.getElementById('last-update').textContent = formatDate(sorted[0].date);
   }
 }
 
