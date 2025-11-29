@@ -906,22 +906,6 @@ const relativeChange = calcRelativeChange(latestPrice, change);
      </div>
      </div>`}).join('');
    }
-   }
-                return `
-                    <div class="quick-stat-card animate-in">
-                        <div class="quick-stat-header">
-                            <span class="quick-stat-icon">${productInfo.icon}</span>
-                            <span>${productName}</span>
-                        </div>
-                        <div class="quick-stat-price">${formatVND(latestPrice)} VNĐ/lít</div>
-                        <div class="quick-stat-info">
-                            <span class="quick-stat-date">${formatDate(latestDate)}</span>
-                            <span class="quick-stat-change ${changeClass}">${changeIcon} ${formatVND(Math.abs(change))} VNĐ</span>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
 
         // Update statistics
         function updateStatistics() {
