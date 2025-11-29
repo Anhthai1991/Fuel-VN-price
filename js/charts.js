@@ -18,8 +18,7 @@ export function initChart(canvasElement, data, filteredData) {
   }
   
   // Prepare datasets for each product
-  const datasets = config.PRODUCTS.map(product => ({
-    label: product.name,
+Object.values(config.PRODUCTS)    label: product.name,.map(product => ({
     data: filteredData.map(d => d[product.name]),
     borderColor: product.color,
     backgroundColor: product.color + '20',
