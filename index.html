@@ -764,6 +764,9 @@ tbody tr:hover {
 
                         if (allData.length > 0) {
                             document.getElementById('totalRecords').textContent = `${allData.length} entries`;
+                                                                const sortedByDate = [...allData].sort((a, b) => parseDate(b.date) - parseDate(a.date));
+                                    const lastDate = sortedByDate[0].date;
+                                    document.getElementById('lastUpdate').textContent = formatDate(lastDate);
                             document.getElementById('loadingMessage').style.display = 'none';
                             document.getElementById('dashboardContent').style.display = 'block';
                             selectRange('ALL');
