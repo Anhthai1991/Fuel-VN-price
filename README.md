@@ -22,26 +22,56 @@ Professional oil price tracking system with automated updates, interactive dashb
 
 ```
 pvoil-price-tracker/
-├── index.html                          # Main dashboard
-├── styles.css                          # Professional styling
-├── script.js                           # Interactive features
-├── pvoil_gasoline_prices_full.csv      # Your data (auto-updated)
-├── update_pvoil_prices.py              # Update script
-├── requirements.txt                    # Python dependencies
-├── README.md                           # This file
+├── index.html              # Clean HTML template
+├── css/
+│   ├── styles.css          # Main stylesheet
+│   └── variables.css       # CSS variables (colors, sizes)
+├── js/
+│   ├── config.js           # Product definitions & constants
+│   ├── utils.js            # Utility functions (format, date, calc)
+│   ├── dataLoader.js       # CSV loading & processing
+│   ├── ui.js               # DOM manipulation & rendering
+│   ├── charts.js           # Chart.js integration wrapper
+│   └── app.js              # Main entry point orchestrator
+├── pvoil_gasoline_prices_full.csv  # Auto-updated data
+├── update_pvoil_prices.py  # Python data scraper
+├── requirements.txt        # Python dependencies
+├── README.md               # This file
 │
 ├── .github/
 │   └── workflows/
-│       └── update-pvoil-prices.yml     # GitHub Actions (7-day auto-update)
+│       └── update-pvoil-prices.yml  # GitHub Actions automation
 │
-├── exports/
-│   └── oil_prices_*.csv               # Exported data by date range
+├── docs/
+│   ├── MODULAR_SETUP_GUIDE.md       # Modular architecture docs
+│   ├── SETUP_GUIDE.md               # Quick start guide
+│   └── UPDATE_REPORT.md             # Auto-generated update reports
 │
-└── docs/
-    ├── SETUP_GUIDE.md                 # Quick start
-    └── UPDATE_REPORT.md               # Auto-generated reports
+└── exports/
+    └── oil_prices_*.csv             # Exported data by date range
 ```
 
+### 🏗️ Modular Architecture Benefits
+
+This dashboard uses a **modular, component-based architecture** designed for maintainability and scalability:
+
+| Module | Purpose | Responsibility |
+|--------|---------|----------------|
+| **config.js** | Configuration | Product definitions, constants, UI settings |
+| **utils.js** | Utilities | VND formatting, date handling, calculations |
+| **dataLoader.js** | Data Processing | CSV loading, filtering, date range selection |
+| **ui.js** | DOM Rendering | Display updates, element manipulation |
+| **charts.js** | Visualization | Chart.js wrapper, chart initialization |
+| **app.js** | Orchestration | Main app entry point, initialization |
+| **styles.css** | Styling | Responsive design, responsive grid/flexbox |
+| **variables.css** | Design System | CSS variables for colors, sizes, typography |
+
+**Key Benefits:**
+- ✅ **Separation of Concerns**: Each module has a single responsibility
+- ✅ **Easy Maintenance**: Update individual modules without affecting others
+- ✅ **Reusable Components**: Functions can be used across multiple modules
+- ✅ **Scalability**: Easy to add new features or products
+- ✅ **Testing**: Each module can be tested independently
 ## 🚀 Quick Start
 
 ### 1. Clone & Setup
@@ -214,6 +244,12 @@ Ngày,Mặt hàng,Giá (VND)
 - Current trend: Moderate
 
 ## 🔧 Technical Details
+
+**Architecture:** Modular, component-based design with separate concerns
+- Frontend modules are organized by responsibility (config, utils, dataLoader, ui, charts, app)
+- CSS uses variables for consistent theming and responsive design
+- Each module exports specific functions for cross-module use
+- Static imports allow direct module usage (no build system required)
 
 ### Frontend
 - **HTML5**: Semantic markup
