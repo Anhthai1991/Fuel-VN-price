@@ -883,13 +883,29 @@ tbody tr:hover {
                 const latestDate = sortedData[0].date;
                 const prevPrice = sortedData.length > 1 ? sortedData[1].price : latestPrice;
                 const change = latestPrice - prevPrice;
-                const relativeChange = calcRelativeChange(currentPrice, absChange);
-                const changeClass = change > 0 ? 'up' : change < 0 ? 'down' : '';
-                const changeIcon = change > 0 ? '↑' : change < 0 ? '↓' : '→';
-                const relativeText = `${absChange > 0 ? '↑' : absChange < 0 ? '↓' : ''} ${Math.abs(relativeChange).toFixed(2)}%`;
-                changeBadge.innerHTML = `
-                  <span class="${changeClass}">${changeText}</span>
-                  <span class="${changeClass} change-percent">${relativeText}</span>
+const relativeChange = calcRelativeChange(latestPrice, change);
+     const changeClass = change > 0 ? 'up' : change < 0 ? 'down' : '';
+     const changeIcon = change > 0 ? '↑' : change < 0 ? '↓' : '→';
+     const changeText = `${changeIcon} ${formatVND(Math.abs(change))} VNĐ`;
+     const relativeText = `${changeIcon} ${Math.abs(relativeChange).toFixed(2)}%`;
+     const productInfo = productMap[productName];
+     
+     return `
+     <div class="quick-stat-card animate-in">
+     <div class="quick-stat-header">
+     <span class="quick-stat-icon">${productInfo.icon}</span>
+     <span>${productName}</span>
+     </div>
+     <div class="quick-stat-price">${formatVND(latestPrice)} VNĐ/lít</div>
+     <div class="quick-stat-info">
+     <span class="quick-stat-date">${formatDate(latestDate)}</span>
+     <div style="display: flex; gap: 8px;">
+     <span class="quick-stat-change ${changeClass}">${changeText}</span>
+     <span class="quick-stat-change ${changeClass}">${relativeText}</span>
+     </div>
+     </div>
+     </div>
+     `
                 `;
 
                 const productInfo = productMap[productName];
