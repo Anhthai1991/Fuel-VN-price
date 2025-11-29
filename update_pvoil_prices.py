@@ -24,6 +24,8 @@ PVOIL_URL = "https://www.pvoil.com.vn/tin-gia-xang-dau"
 CSV_FILE = "pvoil_gasoline_prices_full.csv"
 GIT_COMMIT_MESSAGE = "Auto-update PVOIL fuel prices - {date}"
 
+# Hàm lấy tất cả các ngày có trên website PVOIL
+
 def get_dates_from_website():
     """
     Extract all available dates from PVOIL website
@@ -53,6 +55,19 @@ def get_dates_from_website():
     except Exception as e:
         print(f"[ERROR] Failed to get dates: {e}")
         return []
+
+# Thêm hàm đọc ngày cuối cùng từ CSV để so sánh
+
+def get_last_date_from_csv():
+    if not os.path.exists(CSV_FILE):
+        return None
+    
+    df = pd.read_csv(CSV_FILE)
+    # cột 'Ngày' đang dạng DD/MM/YYYY
+    df["Ngày_dt"] = pd.to_datetime(df["Ngày"], format="%d/%m/%Y")
+    return df["Ngày_dt"].max()
+
+# Hàm crawl giá cho một ngày cụ thể
 
 def crawl_pvoil_prices_by_date(date_str):
     """
@@ -124,46 +139,67 @@ def crawl_pvoil_prices_by_date(date_str):
         print(f"[ERROR] Failed to crawl prices for {date_str}: {e}")
         return []
 
+# Hàm crawl tất cả các ngày > ngày cuối cùng trong CSV
+
 def crawl_all_prices():
     """
     Crawl all available prices from PVOIL website
     Returns: list of [date, fuel_type, price] records
     """
     dates = get_dates_from_website()
-    all_data = []
-    
     if not dates:
         print("[ERROR] No dates found. Cannot proceed.")
         return []
-    
-    for date in dates:
-        data = crawl_pvoil_prices_by_date(date)
+
+    last_date = get_last_date_from_csv()
+    print(f"[INFO] Last date in CSV: {last_date}")
+
+    # chuyển về datetime để so sánh
+    dates_dt = []
+    for d in dates:
+        d_only = d.split()[0]          # "DD/MM/YYYY"
+        dt = datetime.strptime(d_only, "%d/%m/%Y")
+        dates_dt.append((dt, d))
+
+    # nếu chưa có file thì crawl hết
+    if last_date is not None:
+        dates_dt = [x for x in dates_dt if x[0] > last_date]
+
+    if not dates_dt:
+        print("[INFO] No new dates to crawl.")
+        return []
+
+    all_data = []
+    for dt, date_str in dates_dt:
+        data = crawl_pvoil_prices_by_date(date_str)
         all_data.extend(data)
-    
+
     return all_data
+
 
 def update_csv(data):
     """
-    Update CSV file with price data
-    Args: data = list of [date, fuel_type, price]
+    data: list of [date, fuel_type, price] CHỈ cho các ngày mới
     """
     try:
         print(f"\n[INFO] Updating CSV file: {CSV_FILE}")
-        
-        # Write directly with csv module for better control
-        with open(CSV_FILE, 'w', newline='', encoding='utf-8') as f:
-            writer = csv.writer(f)
-            # Write header
-            writer.writerow(['Ngày', 'Mặt hàng', 'Giá (VND)'])
-            # Write data rows
-            writer.writerows(data)
-        
-        print(f"[SUCCESS] CSV updated successfully. Total records: {len(data)}")
+        df_new = pd.DataFrame(data, columns=['Ngày', 'Mặt hàng', 'Giá (VND)'])
+
+        if os.path.exists(CSV_FILE):
+            df_old = pd.read_csv(CSV_FILE)
+            df_all = pd.concat([df_old, df_new], ignore_index=True)
+            df_all = df_all.drop_duplicates(subset=['Ngày', 'Mặt hàng'], keep='last')
+        else:
+            df_all = df_new
+
+        df_all.to_csv(CSV_FILE, index=False, encoding="utf-8-sig")
+        print(f"[SUCCESS] CSV updated successfully. Total records: {len(df_all)}")
         return True
-        
+
     except Exception as e:
         print(f"[ERROR] Failed to update CSV: {e}")
         return False
+
 
 def git_commit_push():
     """
