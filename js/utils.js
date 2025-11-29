@@ -31,3 +31,6 @@ function sortData(data, column, direction) {
     return direction === 'asc' ? valA - valB : valB - valA;
   });
 }
+
+
+export { formatVND, parseDate, formatDate, calcRelativeChange, sortData };
