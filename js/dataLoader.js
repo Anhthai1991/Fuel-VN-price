@@ -1,5 +1,6 @@
 /** CSV Data Loading & Processing Module */
 import { CSV_FILE } from './config.js';
+import { showError } from './ui.js';
 
 
 let allData = [];
