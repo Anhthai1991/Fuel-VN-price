@@ -73,3 +73,6 @@ function selectRange(range) {
   });
   updateDashboard();
 }
+
+
+export default { loadData };
