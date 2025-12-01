@@ -145,3 +145,14 @@ body {
   padding: var(--spacing-sm, 0.5rem) var(--spacing-md, 1rem);
   font-style: italic;
 }
+/* Events / Insights */
+#insights h2 { margin: 12px 0; font-size: 1.1rem; }
+.events-list { display:flex; gap:12px; flex-wrap:wrap; margin-bottom: 14px; }
+.event-card { background:white; padding:12px; border-radius:8px; box-shadow:var(--shadow-sm); width: 260px; }
+.event-card h3 { margin-bottom:6px; font-size: 0.95rem; }
+.event-card p { font-size: 0.85rem; color:#444; }
+
+/* Data table */
+.data-table { width:100%; border-collapse: collapse; background:white; box-shadow:var(--shadow-sm); border-radius:8px; overflow:hidden; }
+.data-table thead th { text-align:left; padding:8px 12px; background:#f7f8fa; font-weight:600; }
+.data-table tbody td { padding:8px 12px; border-top:1px solid #eee; }
