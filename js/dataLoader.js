@@ -1,18 +1,16 @@
 // js/dataLoader.js
 import { CSV_FILE } from './config.js';
 
-let _cachedData = null;
+let cache = null;
 
 export function loadData() {
-  if (_cachedData) return Promise.resolve(_cachedData);
+  if (cache) return Promise.resolve(cache);
 
   return new Promise((resolve, reject) => {
-    if (typeof Papa === 'undefined' || !Papa.parse) {
-      reject(new Error('PapaParse not available. Include papaparse before module scripts.'));
+    if (typeof Papa === 'undefined') {
+      reject(new Error('PapaParse not loaded'));
       return;
     }
-
-    console.log('dataLoader: loading CSV from', CSV_FILE);
 
     Papa.parse(CSV_FILE, {
       download: true,
@@ -20,108 +18,45 @@ export function loadData() {
       skipEmptyLines: true,
       complete(results) {
         try {
-          if (!results || !results.data) {
-            reject(new Error('CSV parse returned no data'));
-            return;
-          }
+          const rows = (results && results.data) ? results.data : [];
+          const mapped = rows.map(r => {
+            const date = r['Ngày'] || r['Date'] || r.date || r['Ngày/Tháng/Năm'];
+            const product = (r['Mặt hàng'] || r['Product'] || r.product || '').toString().trim();
+            const priceRaw = r['Giá (VND)'] || r['Price'] || r.price || '';
+            const price = typeof priceRaw === 'string' ? parseFloat(priceRaw.replace(/[^\d.-]/g, '')) : Number(priceRaw);
+            return { date, product, price, _raw: r };
+          }).filter(r => r.date && r.product && Number.isFinite(r.price));
 
-          const mapped = results.data
-            .map(row => {
-              const date = row['Ngày'] || row['Date'] || row['date'];
-              const product = row['Mặt hàng'] || row['Product'] || row['product'];
-              const priceRaw = row['Giá (VND)'] || row['Price'] || row['price'];
+          // sort by date ascending
+          mapped.sort((a,b) => {
+            const da = new Date(a.date.includes('/') ? a.date.split('/').reverse().join('-') : a.date);
+            const db = new Date(b.date.includes('/') ? b.date.split('/').reverse().join('-') : b.date);
+            return da - db;
+          });
 
-              const priceNum = typeof priceRaw === 'string'
-                ? parseFloat(priceRaw.replace(/[, ]+/g, ''))
-                : parseFloat(priceRaw);
-
-              return {
-                date: date,
-                product: product,
-                price: Number.isFinite(priceNum) ? priceNum : NaN,
-                _raw: row
-              };
-            })
-            .filter(r => r.date && r.product && !Number.isNaN(r.price));
-
-          mapped.sort((a, b) => parseDate(a.date) - parseDate(b.date));
-
-          _cachedData = mapped;
-          console.log(`dataLoader: loaded ${mapped.length} valid rows`);
+          cache = mapped;
           resolve(mapped);
         } catch (err) {
-          console.error('dataLoader: error processing CSV', err);
           reject(err);
         }
       },
-      error(err) {
-        console.error('dataLoader: Papa.parse error', err);
-        reject(err);
-      }
+      error(err) { reject(err); }
     });
   });
 }
 
-export function parseDate(dateStr) {
-  if (!dateStr) return new Date(NaN);
-  const s = String(dateStr).trim();
-  if (s.includes('/')) {
-    const parts = s.split('/').map(p => p.trim());
-    if (parts.length === 3) {
-      const [d, m, y] = parts;
-      const iso = `${y.padStart(4, '0')}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
-      const dt = new Date(iso);
-      if (!Number.isNaN(dt.getTime())) return dt;
-    }
-  }
-  const dt = new Date(s);
-  return dt;
-}
-
-export function formatDate(dateStr) {
-  const d = parseDate(dateStr);
-  if (!d || Number.isNaN(d.getTime())) return '';
-  const day = String(d.getDate()).padStart(2, '0');
-  const month = String(d.getMonth() + 1).padStart(2, '0');
-  const year = d.getFullYear();
-  return `${day}/${month}/${year}`;
-}
-
-export function getLastDate(data) {
-  if (!Array.isArray(data) || data.length === 0) return null;
-  let latest = null;
-  for (const r of data) {
-    const d = parseDate(r.date);
-    if (!latest || d > latest) latest = d;
-  }
-  return latest;
-}
-
 export function filterDataByRange(data, range) {
-  if (!Array.isArray(data) || data.length === 0) return [];
-
-  const sorted = [...data].sort((a, b) => parseDate(a.date) - parseDate(b.date));
-
-  if (!range || range === 'ALL') return sorted;
-
-  const last = parseDate(sorted[sorted.length - 1].date);
-  if (!last || Number.isNaN(last.getTime())) return sorted;
-
-  const start = new Date(last.getTime());
-
-  switch (range) {
-    case '1M': start.setMonth(start.getMonth() - 1); break;
-    case '3M': start.setMonth(start.getMonth() - 3); break;
-    case '6M': start.setMonth(start.getMonth() - 6); break;
-    case '1Y': start.setFullYear(start.getFullYear() - 1); break;
-    case '3Y': start.setFullYear(start.getFullYear() - 3); break;
-    default: return sorted;
-  }
-
-  return sorted.filter(r => {
-    const d = parseDate(r.date);
-    return d && !Number.isNaN(d.getTime()) && d >= start;
+  if (!Array.isArray(data)) return [];
+  if (!range || range === 'ALL') return data;
+  const months = { '1M':1, '3M':3, '6M':6, '1Y':12, '3Y':36 }[range] || null;
+  if (!months) return data;
+  const last = new Date(data[data.length-1].date.includes('/') ? data[data.length-1].date.split('/').reverse().join('-') : data[data.length-1].date);
+  const start = new Date(last);
+  start.setMonth(start.getMonth() - months);
+  return data.filter(r => {
+    const d = new Date(r.date.includes('/') ? r.date.split('/').reverse().join('-') : r.date);
+    return d >= start && d <= last;
   });
 }
 
-export default { loadData };
+export default { loadData, filterDataByRange };

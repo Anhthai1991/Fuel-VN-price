@@ -3,90 +3,97 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>PVOIL Price Tracker</title>
+  <title>Fuel Price Tracker</title>
 
-  <!-- Inline SVG favicon to avoid 404 noise -->
+  <!-- Inline SVG favicon -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E%F0%9F%9B%80%3C/text%3E%3C/svg%3E">
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="css/variables.css" />
-  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/styles.css">
 
-  <!-- External libraries (must load before module scripts) -->
+  <!-- External libs -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
 <body>
   <div class="container">
-    <header style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
-      <h1>PVOIL — Fuel Price Tracker</h1>
-      <div style="text-align:right;">
-        <div id="last-update" style="font-size:0.95rem; color:#666;"></div>
-        <div id="update-frequency" style="font-size:0.85rem; color:#999; margin-top:4px;">Update frequency: automated</div>
+    <header>
+      <div>
+        <h1>Fuel Price Tracker</h1>
+      </div>
+      <div class="meta-header">
+        <div id="last-update">Last updated: -</div>
+        <div id="update-frequency">Update frequency: automated</div>
       </div>
     </header>
 
-    <div id="loadingMessage" style="display:block; text-align:center; padding:20px;">
-      <p>Loading fuel prices…</p>
-    </div>
+    <div id="loadingMessage" class="loading">Loading fuel prices…</div>
 
-    <div id="dashboardContent" style="display:none; margin-top:16px;">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:12px;">
-        <div class="range-buttons" role="toolbar" aria-label="Date ranges">
-          <button class="range-btn active" data-range="1M">1M</button>
-          <button class="range-btn" data-range="3M">3M</button>
-          <button class="range-btn" data-range="6M">6M</button>
-          <button class="range-btn" data-range="1Y">1Y</button>
-          <button class="range-btn" data-range="3Y">3Y</button>
-          <button class="range-btn" data-range="ALL">ALL</button>
+    <main id="dashboardContent" style="display:none">
+      <section class="controls">
+        <div class="left-controls">
+          <div class="range-buttons" role="toolbar" aria-label="Select date range">
+            <button class="range-btn" data-range="1M">1M</button>
+            <button class="range-btn" data-range="3M">3M</button>
+            <button class="range-btn" data-range="6M">6M</button>
+            <button class="range-btn" data-range="1Y">1Y</button>
+            <button class="range-btn" data-range="3Y">3Y</button>
+            <button class="range-btn active" data-range="ALL">ALL</button>
+          </div>
         </div>
 
-        <div style="display:flex; gap:8px; align-items:center;">
-          <select id="productSelector" aria-label="Select product" style="padding:6px 8px;"></select>
-          <button id="exportCsvBtn" class="range-btn">Export CSV</button>
-          <button id="exportJsonBtn" class="range-btn">Export JSON</button>
+        <div class="right-controls">
+          <select id="productSelector" class="product-select"></select>
+          <button id="exportCsvBtn" class="btn-outline">Export CSV</button>
+          <button id="exportJsonBtn" class="btn-outline">Export JSON</button>
         </div>
-      </div>
+      </section>
 
-      <div class="chart-container" style="margin-bottom:16px;">
-        <canvas id="priceChart"></canvas>
-      </div>
+      <section class="chart-block">
+        <h2>📈 Price Trends</h2>
+        <div class="chart-container">
+          <canvas id="priceChart"></canvas>
+        </div>
+      </section>
 
-      <div class="controls-row" style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px;">
-        <div id="totalRecords" style="color:#666;"></div>
-        <div style="text-align:right; color:#666;">Data source: PVOIL | CSV updated automatically</div>
-      </div>
+      <section class="top-stats">
+        <div class="statistics"></div>
+      </section>
 
-      <div id="statistics" class="statistics" style="margin-bottom:16px;"></div>
-
-      <section id="insights" style="margin-bottom:16px;">
-        <h2>Market Insights & Key Events</h2>
+      <section id="insights" class="insights">
+        <h2>💡 Market Insights & Key Events</h2>
         <div id="eventsList" class="events-list"></div>
       </section>
 
-      <section id="price-cards-section" style="margin-bottom:16px;">
+      <section class="current-prices">
         <h2>Current Prices</h2>
-        <div id="price-cards" class="dashboard"></div>
+        <div id="price-cards" class="cards-grid"></div>
       </section>
 
-      <section id="historical-data" style="margin-bottom:24px;">
+      <section id="details" class="details">
+        <h2>📊 Statistics for Selected Range</h2>
+        <div id="statistics" class="statistics-cards"></div>
+      </section>
+
+      <section id="historical-data" class="historical">
         <h2>Historical Price Data</h2>
         <div style="margin-bottom:8px;">
-          <button id="showTableBtn" class="range-btn">Toggle Table</button>
+          <button id="showTableBtn" class="btn-outline">Toggle Table</button>
         </div>
-        <div id="dataTableWrapper" style="display:none; margin-top:8px;">
-          <table id="dataTable" class="data-table" aria-live="polite">
-            <thead><tr><th>Date</th><th>Product</th><th>Price (VND)</th></tr></thead>
+        <div id="dataTableWrapper" style="display:none">
+          <table id="dataTable" class="data-table">
+            <thead>
+              <tr><th>Date</th><th>Product</th><th>Price (VND)</th></tr>
+            </thead>
             <tbody></tbody>
           </table>
         </div>
       </section>
 
-      <div id="error-message" style="display:none; color:var(--error-color, #c0392b)"></div>
-    </div>
+      <div id="error-message" class="error" style="display:none"></div>
+    </main>
   </div>
 
-  <!-- App entry -->
   <script type="module" src="js/app.js"></script>
 </body>
 </html>
