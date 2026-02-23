@@ -3,7 +3,9 @@ export const PRODUCTS = [
   { name: 'Xăng RON 95-III', code: 'ron95',  color: '#ef4444', icon: '⛽' },
   { name: 'Xăng E5 RON 92-II', code: 'e5',  color: '#0ea5e9', icon: '⛽' },
   { name: 'Dầu DO 0,05S-II',   code: 'do',  color: '#059669', icon: '🛢️' },
-  { name: 'Dầu KO',            code: 'ko',  color: '#f59e0b', icon: '🛢️' }
+  { name: 'Dầu KO',            code: 'ko',  color: '#ff7f0e', icon: '🛢️' },
+  { name: 'Dầu DO 0,001S-V',   code: 'dov',  color: '#f59e0b', icon: '🛢️' },
+  { name: 'Xăng E10 RON 95-III', code: 'e10ron95',  color: '#17becf', icon: '⛽' }
 ];
 
 export const CSV_FILE = './pvoil_gasoline_prices_full.csv';
