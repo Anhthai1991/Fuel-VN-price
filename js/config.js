@@ -16,7 +16,7 @@ export const UI = { CHART_HEIGHT: 420 };
 export const EVENTS = [
   { date: '20/04/2020', title: 'COVID-19 Impact', summary: 'Oil prices crashed during pandemic lockdowns. Global demand dropped significantly affecting all fuel products.' },
   { date: '30/06/2022', title: 'Energy Crisis', summary: 'Prices peaked during global energy crisis. Supply chain disruptions and geopolitical tensions drove prices to historic highs.' },
-  { date: '03/11/2025', title: 'Current Market', summary: 'Market shows moderate stability with controlled volatility. Prices remain relatively stable compared to previous years.' }
+  { date: '28/02/2026', title: 'Middle East War', summary: 'Military conflict in the Middle East caused significant disruptions in oil supply chains, leading to price increases across all fuel products.' }
 ];
 
 export default { PRODUCTS, CSV_FILE, DATE_RANGES, UI, EVENTS };
