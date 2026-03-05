@@ -18,6 +18,5 @@ export const EVENTS = [
   { date: '30/06/2022', title: 'Energy Crisis', summary: 'Prices peaked during global energy crisis. Supply chain disruptions and geopolitical tensions drove prices to historic highs.' },
   { date: '26/02/2026', title: 'Middle East War', summary: 'US-Israel conflict with Iran and the resulting disruptions in the Strait of Hormuz.' }
 ];
-];
 
 export default { PRODUCTS, CSV_FILE, DATE_RANGES, UI, EVENTS };
